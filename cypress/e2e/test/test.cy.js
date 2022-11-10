@@ -41,26 +41,36 @@ it ('given posts when get request triggered then status code 200 and a post is m
 it('given posts when get request triggered then status code 200 and sorting by id and filtering by aliases obtained', () => {
     cy.request('GET', 'posts?_sort=id&_order=asc&q=alias').then((response)=> {
         expect(response.status).to.eq(200)
-        // (expect(response.body).to.have.property('body', 'alias') || expect(response.body).to.have.property('title','alias'))
+
+        for(var i=0; i<response.body.length; i++){
+            const texto = JSON.stringify(response.body[i])
+            expect(texto).contains('alias')
+        }
     })
 })
 
 it('given comments when get request triggered then status code 200 and a pagination of 3 and 5 elements obtained', () => {
     cy.request('GET', 'comments?_page=3&_limit=5').then((response)=>{
         expect(response.status).to.eq(200)
+        expect(response.body).to.have.length(5)
+        
+        for(var i=0; i<response.body.length; i++){
+            const texto = JSON.stringify(response.body[i])
+            expect(response.body[i]).to.have.property('postId', 3)
+        }
     })
 })
 
-// it ('given posts when get request triggered then status code 201 and a new post is created',() =>{
-//     cy.request('POST', 'http://localhost:3000/posts',
-//      {userId: 10,id: 101, title: 'Yago creado cypress', body: 'Hello World desde cypress'}).then((response) => {
-//         expect(response.body).to.have.property('userId', 10)
-//         expect(response.body).to.have.property('id', 101)
-//         expect(response.body).to.have.property('title', 'Yago creado cypress')
-//         expect(response.body).to.have.property('body', 'Hello World desde cypress')
-//      })
-// })
+it ('given posts when get request triggered then status code 201 and a new post is created',() =>{
+    cy.request('POST', 'http://localhost:3000/posts',
+     {userId: 10,id: 101, title: 'Yago creado cypress', body: 'Hello World desde cypress'}).then((response) => {
+        expect(response.body).to.have.property('userId', 10)
+        expect(response.body).to.have.property('id', 101)
+        expect(response.body).to.have.property('title', 'Yago creado cypress')
+        expect(response.body).to.have.property('body', 'Hello World desde cypress')
+     })
+})
 
-// it ('check the endpoint posts delete a record created then get status code 200',() =>{
-//     cy.request('DELETE', 'http://localhost:3000/posts/101')
-// })
+it ('check the endpoint posts delete a record created then get status code 200',() =>{
+    cy.request('DELETE', 'http://localhost:3000/posts/101')
+})
