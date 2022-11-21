@@ -1,6 +1,5 @@
-
-
 /// <reference types="cypress"/>
+describe('TEST EJERCICIOS', () => {
 it ('Prueba de GET request en mi servidor http se comprueba que el primer usuario es el deseado', () =>{
     cy.request({
         url:`/users/${1}`,
@@ -73,4 +72,5 @@ it ('given posts when get request triggered then status code 201 and a new post 
 
 it ('check the endpoint posts delete a record created then get status code 200',() =>{
     cy.request('DELETE', 'http://localhost:3000/posts/101')
+})
 })
